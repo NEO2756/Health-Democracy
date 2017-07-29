@@ -1,3 +1,11 @@
+Technology stack:
+
+1. MEAN Stack, web3.js
+2. Andorid for app
+3. Ethererum (Solidity) for smart contract
+4. Truffle for deplyoing smart contarcts.
+
+
 We are trying to solve the issues in current health scenario.
 
 # CURRENT SCENARIO
