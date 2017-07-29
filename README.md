@@ -1,10 +1,3 @@
-Technology stack:
-
-1. MEAN Stack, web3.js
-2. Andorid for app
-3. Ethererum (Solidity) for smart contract
-4. Truffle for deplyoing smart contarcts.
-
 
 We are trying to solve the issues in current health scenario.
 
@@ -20,4 +13,11 @@ We are trying to solve the issues in current health scenario.
 * Distributed framework for patient digital identities, which uses private and public identifiers secured through cryptography, creates a singular, more secure method of protecting patient identity.
 * Smart contracts create a consistent, rule-based method for accessing patient data that can be permissioned to selected health organizations. 
 * A blockchain solution could address the HIPAA Privacy Rule by separating and encrypting identity, PII, and PHI.
+
+# Technology stack:
+* Ethererum (Solidity) for smart contract
+* Truffle for deplyoing smart contarcts.
+* MEAN Stack, web3.js
+* Andorid studio for application development 
+
 
