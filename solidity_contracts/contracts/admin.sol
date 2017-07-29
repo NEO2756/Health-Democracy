@@ -99,6 +99,14 @@ pragma solidity ^0.4.11;
     function getTotalPrescriptionsLength() constant returns (uint length1){
             return prescriptionArr.length;
         }
+
+      function getPrescription(uint index) public constant returns(string medicineName, uint timesADay, string fromDate, string tillDate, string doctorId){
+        return (prescriptionArr[index].medicineName,
+                prescriptionArr[index].timesADay,
+                prescriptionArr[index].fromDate,
+                prescriptionArr[index].tillDate,
+                prescriptionArr[index].medicineName);
+      }
         
     }
 
