@@ -58,6 +58,14 @@ pragma solidity ^0.4.11;
 
     contract Pharma
     {
+
+      string public pname;
+
+      function Pharma(string pharma_name)
+      {
+        pname = pharma_name;
+      }
+      
       function getRequest(address customer, string medname, uint quantity) public payable returns (bool a)
       {
         return true;
@@ -69,7 +77,7 @@ pragma solidity ^0.4.11;
         mapping (address => bool) public patients;
         address public Admin;
         address[] public patientsAddr;
-        address public pharmaContract;
+        address[] public pharmaAddr;
         mapping (address =>mapping (uint => string)) public records;
 
         function admin()
@@ -91,15 +99,16 @@ pragma solidity ^0.4.11;
           log(patientContract, "New Patient Registered");
         }
 
-        function registerPharma() adminOnly
+        function registerPharma(string name) adminOnly
         {
-          pharmaContract = new Pharma();
+          address pharmaContract = new Pharma(name);
+          pharmaAddr.push(pharmaContract);
           log(pharmaContract, "New Pharma Registered");
         }
 
-        function getPharmaContract() constant returns(address pharmaContract)
+        function getPharmaContract() constant returns(address addr)
         {
-          return pharmaContract;
+          return pharmaAddr[0];
         }
 
         function  getFirstPatietAddress() constant returns (address addr){
