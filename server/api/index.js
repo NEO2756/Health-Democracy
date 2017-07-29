@@ -16,5 +16,5 @@ router.post('/getPrescriptionLogs', controller.getPrescriptionLogs);
 router.post('/updateMedicineTakeStatus', controller.updateMedicineTakeStatus);
 router.post('/addMedicineLogs', controller.addMedicineLogs);
 router.post('/addMedicineLogsToBlockchain', controller.addMedicineLogsToBlockchain);
-
+router.post('/getPrescriptionFromBlockchain', controller.getPrescriptionFromBlockchain);
 module.exports = router;

@@ -17,8 +17,17 @@ pragma solidity ^0.4.11;
             string time;
             bool status;
         }
+
+        struct prescription{
+          string medicineName;
+          uint timesADay;
+          string fromDate;
+          string tillDate;
+          string doctorId;
+        }
         
-        medicineStatus[] public medStatus; 
+        medicineStatus[] public medStatus;
+        prescription[] public prescriptionArr;
         
         
         
@@ -72,11 +81,46 @@ pragma solidity ^0.4.11;
             m.status = status;
             medStatus.push(m);
         }
+
+        function storePrescription (string medicineName, uint timesADay, string fromDate, string tillDate, string doctorId ){
+          prescription memory p;
+          p.medicineName = medicineName;
+          p.timesADay = timesADay;
+          p.fromDate = fromDate;
+          p.tillDate = tillDate;
+          p.doctorId = doctorId;
+          prescriptionArr.push(p);
+        }
         
         /*function getMedicineStatusLogs() constant returns(medStatus){
             return medStatus;
         }*/
+
+    function getTotalPrescriptionsLength() constant returns (uint length1){
+            return prescriptionArr.length;
+        }
+
+      function getPrescription(uint index) public constant returns(string medicineName, uint timesADay, string fromDate, string tillDate, string doctorId){
+        return (prescriptionArr[index].medicineName,
+                prescriptionArr[index].timesADay,
+                prescriptionArr[index].fromDate,
+                prescriptionArr[index].tillDate,
+                prescriptionArr[index].medicineName);
+      }
+        
     }
+
+    contract Pharma
+      {
+ 
+       string public pname;
+ 
+       function Pharma(string pharma_name)
+       {
+         pname = pharma_name;
+       }
+       
+      }
 
     contract admin
     {
