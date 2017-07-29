@@ -100,14 +100,14 @@ pragma solidity ^0.4.11;
             return prescriptionArr.length;
         }
 
-      function getPrescription(uint index) public constant returns(string medicineName, uint timesADay, string fromDate, string tillDate, string doctorId){
-        return (prescriptionArr[index].medicineName,
-                prescriptionArr[index].timesADay,
-                prescriptionArr[index].fromDate,
-                prescriptionArr[index].tillDate,
-                prescriptionArr[index].medicineName);
+      function getPrescription(uint index1) public constant returns(string medicineName, uint timesADay, string fromDate, string tillDate, string doctorId){
+        return (prescriptionArr[index1].medicineName,
+                prescriptionArr[index1].timesADay,
+                prescriptionArr[index1].fromDate,
+                prescriptionArr[index1].tillDate,
+                prescriptionArr[index1].medicineName);
       }
-        
+    
     }
 
     contract Pharma
