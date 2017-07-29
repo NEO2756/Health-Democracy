@@ -1,0 +1,35 @@
+{
+  "contract_name": "Pharma",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "customer",
+          "type": "address"
+        },
+        {
+          "name": "medname",
+          "type": "string"
+        },
+        {
+          "name": "quantity",
+          "type": "uint256"
+        }
+      ],
+      "name": "getRequest",
+      "outputs": [
+        {
+          "name": "a",
+          "type": "bool"
+        }
+      ],
+      "payable": true,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000c57fe5b5b60c28061001b6000396000f300606060405263ffffffff60e060020a6000350416630311927b81146020575bfe5b60408051602060046024803582810135601f81018590048502860185019096528585526078958335600160a060020a031695939460449493929092019181908401838280828437509496505093359350608c92505050565b604080519115158252519081900360200190f35b60015b93925050505600a165627a7a723058204f07c5ad02eb92447fa4c305ad90883b2d3f10638f3d4ad45faf66ed656ffa590029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1501310732619
+}
