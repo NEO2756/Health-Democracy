@@ -11,6 +11,18 @@ pragma solidity ^0.4.11;
             string blood_grp;
             string phnum;
         }
+        
+        struct medicineStatus{
+            string medicineName;
+            string time;
+            bool status;
+        }
+        
+        medicineStatus[] public medStatus; 
+        
+        
+        
+        
 
         patient public p;
         function Patient(string name, string p_address, uint dob, string blood_grp, string phnum)
@@ -52,24 +64,18 @@ pragma solidity ^0.4.11;
          logEvent(bpm, bp, spo2);
         }
         event logEvent(uint bpm, uint bp, string spo2);
-    }
-
-
-
-    contract Pharma
-    {
-
-      string public pname;
-
-      function Pharma(string pharma_name)
-      {
-        pname = pharma_name;
-      }
-      
-      function getRequest(address customer, string medname, uint quantity) public payable returns (bool a)
-      {
-        return true;
-      }
+        
+        function storeMedicineStatus(string medicineName, string time,  bool status){
+            medicineStatus memory  m;
+            m.medicineName = medicineName;
+            m.time = time;
+            m.status = status;
+            medStatus.push(m);
+        }
+        
+        /*function getMedicineStatusLogs() constant returns(medStatus){
+            return medStatus;
+        }*/
     }
 
     contract admin
@@ -113,6 +119,11 @@ pragma solidity ^0.4.11;
 
         function  getFirstPatietAddress() constant returns (address addr){
             return patientsAddr[0];
+        }
+
+        function getLatestPatientAddress() constant returns (address addr){
+            uint length= patientsAddr.length;
+            return patientsAddr[length-1];
         }
 
         function addRecords(address id, uint day, string data)
