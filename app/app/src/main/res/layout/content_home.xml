@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="me.ritabrata.myhealth.activity.HomeActivity"
+    tools:showIn="@layout/app_bar_home">
+
+<android.support.v7.widget.CardView
+    android:id="@+id/myHomeDateCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp">
+
+    <TextView
+        android:id="@+id/myHomeDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="25th July,2017"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_margin="16dp"/>
+
+</android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_below="@+id/myHomeDateCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/myTitleTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/myHomeMorningTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Morning"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:background="#E1F5FE"
+                    android:layout_margin="8dp"/>
+
+
+                <TextView
+                    android:id="@+id/myHomeAfternoonTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Afternoon"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="#FFD54F"
+                    android:layout_margin="8dp"/>
+
+            </LinearLayout>
+
+<LinearLayout
+    android:id="@+id/myDetailTop"
+    android:layout_below="@+id/myTitleTop"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="2">
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/myHomeMorningList"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="3"
+            android:onClick="doShowMorningList"
+            android:textSize="36sp"
+            android:gravity="center"
+            />
+
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/myHomeAfternoonList"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="0"
+            android:onClick="doShowAfternoonList"
+            android:textSize="36sp"
+            android:gravity="center"/>
+
+
+    </android.support.v7.widget.CardView>
+
+
+
+</LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/myTitleBottom"
+                android:layout_below="@+id/myDetailTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/myHomeEveningTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Evening"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:background="#E6EE9C"
+                    android:layout_margin="8dp"/>
+
+
+                <TextView
+                    android:id="@+id/myHomeNightTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Night"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="#BDBDBD"
+                    android:layout_margin="8dp"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/myDetailBottom"
+                android:layout_below="@+id/myTitleBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2">
+
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/myHomeEveningList"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:layout_weight="1"
+
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="8"
+                        android:onClick="doShowEveningList"
+                        android:textSize="36sp"
+                        android:gravity="center"
+                        />
+
+
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/myHomeNightList"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="2"
+                        android:onClick="doShowNightList"
+                        android:textSize="36sp"
+                        android:gravity="center"/>
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+
+
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="88dp"
+        android:onClick="doShowMyMedicines"
+        android:text="My Medicines"/>
+
+</RelativeLayout>

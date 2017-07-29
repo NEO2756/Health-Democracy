@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context="me.ritabrata.myhealth.activity.AddPrescriptionActivity">
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/myMedTextView"
+        android:text="Add Medicine"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="46dp"
+        android:layout_below="@+id/myMedTextView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/myMedNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Medicine Name"/>
+
+
+            <EditText
+                android:id="@+id/myMedTimesADayEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:visibility="gone"
+                />
+
+
+            <Spinner
+                android:id="@+id/myTimesADaySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                />
+
+
+            <EditText
+                android:id="@+id/myClock1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:onClick="doClockOne"
+                android:visibility="gone"
+                android:hint="Select Medicine Time"/>
+            <EditText
+                android:id="@+id/myClock2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:visibility="gone"
+                android:onClick="doClockTwo"
+                android:hint="Select Medicine Time"/>
+            <EditText
+                android:id="@+id/myClock3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:onClick="doClockThree"
+                android:visibility="gone"
+                android:hint="Select Medicine Time"/>
+
+            <EditText
+                android:id="@+id/myClock4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:onClick="doClockFour"
+                android:visibility="gone"
+                android:hint="Select Medicine Time"/>
+
+
+            <EditText
+                android:id="@+id/myMedFromDateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:onClick="doSelectStartDate"
+                android:hint="Select Start Date "/>
+
+            <EditText
+                android:id="@+id/myMedTillDateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="doSelectEndDate"
+                android:layout_margin="16dp"
+                android:hint="Select End Date "/>
+
+            <EditText
+                android:id="@+id/myMedDoctorIdEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Doctor ID "/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:text="Save"
+        android:layout_alignParentBottom="true"
+        android:onClick="doSaveMedicine"
+        android:id="@+id/myMedSaveButton"/>
+
+</RelativeLayout>
