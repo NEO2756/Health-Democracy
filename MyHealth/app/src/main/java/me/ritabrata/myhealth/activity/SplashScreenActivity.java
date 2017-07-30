@@ -13,8 +13,7 @@ import me.ritabrata.myhealth.models.UserModel;
 
 public class SplashScreenActivity extends Activity {
 
-    private static int SPLASH_TIME_OUT = 3000;
-
+    private static int SPLASH_TIME_OUT = 1800;
     private int successCount = 0, errorCount = 0;
 
     @Override
@@ -27,34 +26,16 @@ public class SplashScreenActivity extends Activity {
             @Override
             public void run() {
 
-//                startActivity(new Intent(getApplicationContext(),HomeActivity.class));
-//                finish();
+                if (!(ConfigHelper.getUserID(getApplicationContext()).isEmpty())) {
+                    ConfigHelper.myUserID = ConfigHelper.getUserID(getApplicationContext());
+                    syncAll();
+                } else {
+                    startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
+                }
             }
         }, SPLASH_TIME_OUT);
 
-
     }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (!(ConfigHelper.getUserID(this).isEmpty())) {
-
-            ConfigHelper.myUserID= ConfigHelper.getUserID(this);
-
-            syncAll();
-
-        }
-
-        else
-        {
-            startActivity(new Intent(getApplicationContext(),RegistrationActivity.class));
-        }
-
-    }
-
 
     public void goHome() {
         if (successCount + errorCount == 1) {
@@ -65,8 +46,7 @@ public class SplashScreenActivity extends Activity {
 
     public void syncAll() {
 
-        UserModel.getPatientDetail(new TaskCallback()
-        {
+        UserModel.getPatientDetail(new TaskCallback() {
             @Override
             public void onSuccess(String apiResponse) {
                 super.onSuccess(apiResponse);
@@ -91,5 +71,4 @@ public class SplashScreenActivity extends Activity {
         errorCount += 1;
         goHome();
     }
-
 }

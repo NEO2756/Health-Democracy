@@ -10,30 +10,13 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 
-
 public interface ApiInterface {
 
-//    @GET("apiStates.php")
-//    Call<StateModel.StatesResponse> getStates(@Header("token") String accessKey);
-//
-//    @POST("apiSendOTP.php")
-//    @FormUrlEncoded
-//    Call<UserModel.responsePhoneVerify> verifyPhone(
-//            @Field("mobile") String phone);
-//
-//    @POST("apiVerifyOTP.php")
-//    @FormUrlEncoded
-//    Call<UserModel.responseOTPVerify> verifyOTP(
-//            @Field("mobile") String mobile,
-//            @Field("otp") String otp
-//    );
-//
     @POST("getPatinetDetails")
     @FormUrlEncoded
     Call<UserModel.responseGetProfile> getProfile(
             @Field("patientId") String patientId
     );
-
 
 
     @POST("registerPatient")
@@ -43,8 +26,8 @@ public interface ApiInterface {
             @Field("mobileNo") String mobileNo,
             @Field("address") String address,
             @Field("dob") String dob,
-            @Field("bloodGroup") String bloodGroup,
-            @Field("from") String from
+            @Field("bloodGroup") String bloodGroup
+
     );
 
     @POST("addPrescription")
@@ -58,8 +41,8 @@ public interface ApiInterface {
             @Field("doctorId") String doctorId,
             @Field("clockOne") String clockOne,
             @Field("clockTwo") String clockTwo,
-                    @Field("clockThree") String clockThree,
-                    @Field("clockFour") String clockFour
+            @Field("clockThree") String clockThree,
+            @Field("clockFour") String clockFour
 
     );
 
@@ -71,10 +54,25 @@ public interface ApiInterface {
     );
 
 
+    @POST("addMedicineLogsToBlockchain")
+    @FormUrlEncoded
+    Call<PrescriptionModel.responseMedicineLogs> sendMedLogs(
+            @Field("patientId") String patientId,
+            @Field("medicineName") String medicineName,
+            @Field("date") String date,
+            @Field("time") String time,
+            @Field("status") String status
+    );
 
-//
-//    @GET("apiCollegesAll.php")
-//    Call<CollegeListModel.responseGetCollegeList> getCollegeList(@Header("token") String accessKey);
+
+    @POST("sendSMS")
+    @FormUrlEncoded
+    Call<PrescriptionModel.responseSendSms> sendSMSCall(
+            @Field("phone") String phone,
+            @Field("medicine") String medicine,
+            @Field("patientName") String patientName
+
+    );
 
 }
 

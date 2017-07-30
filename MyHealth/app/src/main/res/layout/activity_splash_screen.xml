@@ -4,18 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bgsplash"
+    android:background="@drawable/bg"
     tools:context="me.ritabrata.myhealth.activity.SplashScreenActivity">
 
+    <ImageView
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_above="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ikon" />
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="HealthWallet"
+        android:textColor="#01579B"
         android:textSize="46sp"
-        android:textStyle="bold"
-        android:textColor="#0288D1"
-        />
+        android:textStyle="bold" />
 
 </RelativeLayout>

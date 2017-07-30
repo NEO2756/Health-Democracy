@@ -5,27 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-
     tools:context="me.ritabrata.myhealth.activity.MedicineStatusActivity">
+
+    <cn.carbs.android.avatarimageview.library.AvatarImageView
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_centerHorizontal="true"
+        android:padding="8dp"
+        android:src="@drawable/pill" />
 
     <Button
         android:id="@+id/medicineTaken"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_margin="32dp"
         android:background="@drawable/border"
-        android:text="I have taken my medicine"
-        android:layout_margin="32dp"/>
+        android:onClick="doTakenMedicine"
+        android:text="I have taken my medicine" />
 
     <Button
         android:id="@+id/medicineNotTaken"
-        android:layout_below="@+id/medicineTaken"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/medicineTaken"
         android:layout_centerInParent="true"
+        android:layout_margin="32dp"
         android:background="@drawable/border"
-        android:text="I haven't taken my medicine"
-        android:layout_margin="32dp"/>
-
+        android:onClick="doNotTakenMedicine"
+        android:text="I haven't taken my medicine" />
 
 </RelativeLayout>

@@ -17,30 +17,21 @@ import me.ritabrata.myhealth.helpers.ConfigHelper;
 import me.ritabrata.myhealth.models.PrescriptionModel;
 
 public class MyMedicinesActivity extends AppCompatActivity {
-
-
-
     ArrayList<PrescriptionModel> myList = new ArrayList<PrescriptionModel>();
-
-    private RecyclerView myRecycler;
     MyMedicinesRecycler adapter;
+    private RecyclerView myRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_medicines);
-
-
         myList.addAll(ConfigHelper.myPrescriptionList);
-
         myRecycler = (RecyclerView) findViewById(R.id.myRecyclerView);
         adapter = new MyMedicinesRecycler(getApplicationContext());
         myRecycler.setAdapter(adapter);
         myRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-
     }
-
 
     public class MyMedicinesRecycler extends RecyclerView.Adapter<MyMedicinesRecycler.MyViewHolder> {
         private LayoutInflater inflater;
@@ -66,34 +57,16 @@ public class MyMedicinesActivity extends AppCompatActivity {
             holder.myMedicineTillDate.setText(ConfigHelper.stringToStringDetailedDateTime(myList.get(position).tillDate));
             holder.myMedicineDoctorId.setText(myList.get(position).doctorId);
 
-
-//            holder.myAttendeeClick.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int id = myList.get(holder.getAdapterPosition()).id;
-//
-//                    Intent myIntent = new Intent(getActivity(), AttendeeDetailActivity.class);
-//                    myIntent.putExtra("id", id);
-//
-//                    startActivity(myIntent);
-//                }
-//            });
-
-
             if (myList.get(position).medicineName.length() > 0) {
                 holder.myMedicineName.setVisibility(View.VISIBLE);
             } else {
                 holder.myMedicineName.setVisibility(View.GONE);
             }
-
-
             if (myList.get(position).timesADay.length() > 0) {
                 holder.myMedicineTimesADay.setVisibility(View.VISIBLE);
             } else {
                 holder.myMedicineTimesADay.setVisibility(View.GONE);
             }
-
-
             if (myList.get(position).fromDate.length() > 0) {
                 holder.myMedicineFromDate.setVisibility(View.VISIBLE);
             } else {
@@ -104,8 +77,6 @@ public class MyMedicinesActivity extends AppCompatActivity {
             } else {
                 holder.myMedicineTillDate.setVisibility(View.GONE);
             }
-
-
             if (myList.get(position).doctorId.length() > 0) {
                 holder.myMedicineDoctorId.setVisibility(View.VISIBLE);
             } else {
@@ -120,24 +91,16 @@ public class MyMedicinesActivity extends AppCompatActivity {
 
         class MyViewHolder extends RecyclerView.ViewHolder {
 
-            TextView myMedicineName,myMedicineTimesADay,myMedicineFromDate,myMedicineTillDate,myMedicineDoctorId;
-            // LinearLayout myAttendeeClick;
+            TextView myMedicineName, myMedicineTimesADay, myMedicineFromDate, myMedicineTillDate, myMedicineDoctorId;
 
             public MyViewHolder(View myView) {
                 super(myView);
-
-
                 myMedicineName = (TextView) myView.findViewById(R.id.myMedicineName);
                 myMedicineTimesADay = (TextView) myView.findViewById(R.id.myMedicineTimesADay);
                 myMedicineFromDate = (TextView) myView.findViewById(R.id.myMedicineFromDate);
                 myMedicineTillDate = (TextView) myView.findViewById(R.id.myMedicineTillDate);
                 myMedicineDoctorId = (TextView) myView.findViewById(R.id.myMedicineDoctorId);
-                // myImageView = (AvatarImageView) myView.findViewById(R.id.myImage);
-                // myAttendeeClick = (LinearLayout) myView.findViewById(R.id.myAttendeeClick);
-
-
             }
         }
-
     }
 }

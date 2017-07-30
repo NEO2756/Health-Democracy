@@ -17,8 +17,6 @@ public class Notificationmassage extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent arg1) {
-
-
         showNotification(context);
     }
 
@@ -31,8 +29,8 @@ public class Notificationmassage extends BroadcastReceiver {
         NotificationManager notif = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notify = new Notification.Builder
                 (context)
-                .setContentTitle("Greens")
-                .setContentText("Jaypee")
+                .setContentTitle("Have you taken your medicine ?")
+
                 .setAutoCancel(true)
                 .setPriority(Notification.PRIORITY_HIGH)
 

@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +19,6 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.RegistrationActivity" />
-        <activity android:name=".activity.DayListActivity" />
         <activity android:name=".activity.AddPrescriptionActivity" />
         <activity android:name=".activity.MyProfileActivity" />
         <activity android:name=".activity.SplashScreenActivity">
@@ -32,7 +31,10 @@
         <activity android:name=".activity.MyMedicinesActivity" />
         <activity android:name=".activity.MedicineStatusActivity"></activity>
 
-        <receiver android:process=":remote" android:name="helpers.Notificationmassage" />
+        <receiver
+            android:name="me.ritabrata.myhealth.helpers.Notificationmassage"
+            android:enabled="true"
+            android:process=":remote" />
 
     </application>
 

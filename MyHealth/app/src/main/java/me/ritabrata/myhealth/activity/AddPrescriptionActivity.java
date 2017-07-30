@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,13 +29,15 @@ import me.ritabrata.myhealth.models.PrescriptionModel;
 
 public class AddPrescriptionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private EditText myMedFromDateEditText,myMedTillDateEditText,myMedNameEditText,myMedTimesADayEditText,myMedDoctorIdEditText;
+    private EditText myMedFromDateEditText, myMedTillDateEditText, myMedNameEditText, myMedDoctorIdEditText;
     private int startmYear, startmMonth, startmDay, startmHour, startmMinute;
-    private int endmYear, endmMonth, endmDay, endmHour, endmMinute;
+    private int endmYear, endmMonth, endmDay;
 
-    private EditText myClock1,myClock2,myClock3,myClock4;
+    private LinearLayout clockFourL, clockThreeL, clockTwoL, clockOneL;
 
-    private Spinner myTimesADaySpinner ;
+    private EditText myClock1, myClock2, myClock3, myClock4;
+
+    private Spinner myTimesADaySpinner;
 
     private String myMedTimes;
 
@@ -46,22 +49,24 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        myMedFromDateEditText = (EditText)findViewById(R.id.myMedFromDateEditText);
-        myMedTillDateEditText =(EditText)findViewById(R.id.myMedTillDateEditText);
-        myMedNameEditText =(EditText)findViewById(R.id.myMedNameEditText);
-        myMedTimesADayEditText =(EditText)findViewById(R.id.myMedTimesADayEditText);
-        myMedDoctorIdEditText =(EditText)findViewById(R.id.myMedDoctorIdEditText);
+        myMedFromDateEditText = (EditText) findViewById(R.id.myMedFromDateEditText);
+        myMedTillDateEditText = (EditText) findViewById(R.id.myMedTillDateEditText);
+        myMedNameEditText = (EditText) findViewById(R.id.myMedNameEditText);
 
-        myClock1 =(EditText)findViewById(R.id.myClock1);
-        myClock2 =(EditText)findViewById(R.id.myClock2);
-        myClock3 =(EditText)findViewById(R.id.myClock3);
-        myClock4 =(EditText)findViewById(R.id.myClock4);
+        myMedDoctorIdEditText = (EditText) findViewById(R.id.myMedDoctorIdEditText);
+
+        myClock1 = (EditText) findViewById(R.id.myClock1);
+        myClock2 = (EditText) findViewById(R.id.myClock2);
+        myClock3 = (EditText) findViewById(R.id.myClock3);
+        myClock4 = (EditText) findViewById(R.id.myClock4);
+
+        clockOneL = (LinearLayout) findViewById(R.id.clockOneL);
+        clockTwoL = (LinearLayout) findViewById(R.id.clockTwoL);
+        clockThreeL = (LinearLayout) findViewById(R.id.clockThreeL);
+        clockFourL = (LinearLayout) findViewById(R.id.clockFourL);
 
         myTimesADaySpinner = (Spinner) findViewById(R.id.myTimesADaySpinner);
-
         myTimesADaySpinner.setOnItemSelectedListener(this);
-
-
 
         List<String> times = new ArrayList<String>();
         times.add("Select Times A Day");
@@ -70,75 +75,56 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
         times.add("3 Times");
         times.add("4 Times");
 
-
-        // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, times);
-
-        // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
         myTimesADaySpinner.setAdapter(dataAdapter);
 
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // On selecting a spinner item
+
         String item = parent.getItemAtPosition(position).toString();
-
-        // Showing selected spinner item
-       // Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
-
         myMedTimes = item.replaceAll(" .+$", "");
 
-        myMedTimesADayEditText.setText(myMedTimes);
-
-
-        if(myMedTimes.contentEquals("1"))
-        {
-            myClock1.setVisibility(View.VISIBLE);
-        }
-        else if(myMedTimes.contentEquals("2"))
-        {
-            myClock1.setVisibility(View.VISIBLE);
-            myClock2.setVisibility(View.VISIBLE);
-        }
-        else if(myMedTimes.contentEquals("3"))
-        {
-            myClock1.setVisibility(View.VISIBLE);
-            myClock2.setVisibility(View.VISIBLE);
-            myClock3.setVisibility(View.VISIBLE);
-        }
-
-        else if(myMedTimes.contentEquals("4"))
-        {
-            myClock1.setVisibility(View.VISIBLE);
-            myClock2.setVisibility(View.VISIBLE);
-            myClock3.setVisibility(View.VISIBLE);
-            myClock4.setVisibility(View.VISIBLE);
-        }
-        else{
+        if (myMedTimes.contentEquals("1")) {
+            clockOneL.setVisibility(View.VISIBLE);
+            clockTwoL.setVisibility(View.GONE);
+            clockThreeL.setVisibility(View.GONE);
+            clockFourL.setVisibility(View.GONE);
+        } else if (myMedTimes.contentEquals("2")) {
+            clockOneL.setVisibility(View.VISIBLE);
+            clockTwoL.setVisibility(View.VISIBLE);
+            clockThreeL.setVisibility(View.GONE);
+            clockFourL.setVisibility(View.GONE);
+        } else if (myMedTimes.contentEquals("3")) {
+            clockOneL.setVisibility(View.VISIBLE);
+            clockTwoL.setVisibility(View.VISIBLE);
+            clockThreeL.setVisibility(View.VISIBLE);
+            clockFourL.setVisibility(View.GONE);
+        } else if (myMedTimes.contentEquals("4")) {
+            clockOneL.setVisibility(View.VISIBLE);
+            clockTwoL.setVisibility(View.VISIBLE);
+            clockThreeL.setVisibility(View.VISIBLE);
+            clockFourL.setVisibility(View.VISIBLE);
+        } else {
 
         }
 
 
     }
+
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
     }
 
-
     public void doClockOne(View v) {
-
-       //  Get Current Time
 
         final Calendar c = Calendar.getInstance();
 
         startmHour = c.get(Calendar.HOUR_OF_DAY);
         startmMinute = c.get(Calendar.MINUTE);
 
-        // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
 
@@ -146,7 +132,6 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
 
-                       // String myDate = myMedFromDateEditText.getText().toString();
                         myClock1.setText(hourOfDay + ":" + minute);
                     }
                 }, startmHour, startmMinute, false);
@@ -161,7 +146,6 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
         startmHour = c.get(Calendar.HOUR_OF_DAY);
         startmMinute = c.get(Calendar.MINUTE);
 
-        // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
 
@@ -169,7 +153,6 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
 
-                        // String myDate = myMedFromDateEditText.getText().toString();
                         myClock1.setText(hourOfDay + ":" + minute);
                     }
                 }, startmHour, startmMinute, false);
@@ -184,7 +167,6 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
         startmHour = c.get(Calendar.HOUR_OF_DAY);
         startmMinute = c.get(Calendar.MINUTE);
 
-        // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
 
@@ -192,7 +174,6 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
 
-                        // String myDate = myMedFromDateEditText.getText().toString();
                         myClock1.setText(hourOfDay + ":" + minute);
                     }
                 }, startmHour, startmMinute, false);
@@ -206,7 +187,6 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
         startmHour = c.get(Calendar.HOUR_OF_DAY);
         startmMinute = c.get(Calendar.MINUTE);
 
-        // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
 
@@ -214,7 +194,6 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
 
-                        // String myDate = myMedFromDateEditText.getText().toString();
                         myClock1.setText(hourOfDay + ":" + minute);
                     }
                 }, startmHour, startmMinute, false);
@@ -223,10 +202,7 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
     }
 
 
-    public void doSelectStartDate(View v)
-    {
-
-        // Get Current Date
+    public void doSelectStartDate(View v) {
         final Calendar c = Calendar.getInstance();
         startmYear = c.get(Calendar.YEAR);
         startmMonth = c.get(Calendar.MONTH);
@@ -245,33 +221,10 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
                 }, startmYear, startmMonth, startmDay);
         datePickerDialog.show();
 
-
-        // Get Current Time
-
-//        startmHour = c.get(Calendar.HOUR_OF_DAY);
-//        startmMinute = c.get(Calendar.MINUTE);
-//
-//        // Launch Time Picker Dialog
-//        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-//                new TimePickerDialog.OnTimeSetListener() {
-//
-//                    @Override
-//                    public void onTimeSet(TimePicker view, int hourOfDay,
-//                                          int minute) {
-//
-//                         String myDate = myMedFromDateEditText.getText().toString();
-//                        myMedFromDateEditText.setText(myDate+","+hourOfDay + ":" + minute);
-//                    }
-//                }, startmHour, startmMinute, false);
-//        timePickerDialog.show();
     }
 
 
-
-    public void doSelectEndDate(View v)
-    {
-
-        // Get Current Date
+    public void doSelectEndDate(View v) {
         final Calendar c = Calendar.getInstance();
         endmYear = c.get(Calendar.YEAR);
         endmMonth = c.get(Calendar.MONTH);
@@ -293,25 +246,36 @@ public class AddPrescriptionActivity extends AppCompatActivity implements Adapte
     }
 
 
-     public void doSaveMedicine(View v){
+    public void doSaveMedicine(View v) {
 
-         PrescriptionModel.addPrescription(myMedNameEditText.getText().toString(),myMedTimes,myMedFromDateEditText.getText().toString(),myMedTillDateEditText.getText().toString(),myMedDoctorIdEditText.getText().toString(),myClock1.getText().toString(),myClock2.getText().toString(),myClock3.getText().toString(),myClock4.getText().toString(), new TaskCallback()
-         {
-             @Override
-             public void onSuccess(String response) {
-                 super.onSuccess(response);
+        PrescriptionModel.addPrescription(myMedNameEditText.getText().toString(), myMedTimes, myMedFromDateEditText.getText().toString(), myMedTillDateEditText.getText().toString(), myMedDoctorIdEditText.getText().toString(), myClock1.getText().toString(), myClock2.getText().toString(), myClock3.getText().toString(), myClock4.getText().toString(), new TaskCallback() {
+            @Override
+            public void onSuccess(String response) {
+                super.onSuccess(response);
 
-                 Toast.makeText(AddPrescriptionActivity.this, "Medicine Added Successfully!", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddPrescriptionActivity.this, "Medicine Added Successfully!", Toast.LENGTH_LONG).show();
 
-             }
+                PrescriptionModel.getPrescriptionLogs(new TaskCallback() {
+                    @Override
+                    public void onSuccess(String response) {
+                        super.onSuccess(response);
+                        finish();
+                    }
 
-             @Override
-             public void onError(String response) {
-                 super.onError(response);
+                    @Override
+                    public void onError(String response) {
+                        super.onError(response);
+                    }
+                });
+                finish();
+            }
 
-             }
+            @Override
+            public void onError(String response) {
+                super.onError(response);
+            }
 
-         });
+        });
 
-     }
+    }
 }

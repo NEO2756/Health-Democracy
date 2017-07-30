@@ -9,152 +9,137 @@
     tools:context="me.ritabrata.myhealth.activity.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
-<android.support.v7.widget.CardView
-    android:id="@+id/myHomeDateCard"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="16dp">
-
-    <TextView
-        android:id="@+id/myHomeDate"
+    <android.support.v7.widget.CardView
+        android:id="@+id/myHomeDateCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Today - 30th July,2017"
-        android:layout_centerHorizontal="true"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:layout_margin="16dp"/>
+        android:layout_margin="16dp">
 
-</android.support.v7.widget.CardView>
+        <TextView
+            android:id="@+id/myHomeDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:text="Today - 30th July,2017"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
+    </android.support.v7.widget.CardView>
 
-<android.support.v7.widget.CardView
-    android:id="@+id/myProfileCard"
-    android:layout_below="@+id/myHomeDateCard"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="16dp">
-
-
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <cn.carbs.android.avatarimageview.library.AvatarImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        app:aiv_BoarderColor="#757575"
-        app:aiv_BoarderWidth="1dp"
-        app:aiv_ShowBoarder="true"
-        android:src="@drawable/profile"
-        android:layout_margin="16dp"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:id="@+id/myProfileCard"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/myName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="John Doe"
-            android:layout_marginTop="16dp"
-            android:textStyle="italic|bold"
-            android:textSize="20sp"/>
+        android:layout_below="@+id/myHomeDateCard"
+        android:layout_margin="16dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+            <cn.carbs.android.avatarimageview.library.AvatarImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/profile"
+                app:aiv_BoarderColor="#757575"
+                app:aiv_BoarderWidth="1dp"
+                app:aiv_ShowBoarder="true" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="24 "
-                android:id="@+id/myAge"
-                android:textSize="18sp"
-                />
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" years old."
-                android:textSize="18sp"
-                />
+                <TextView
+                    android:id="@+id/myName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="John Doe"
+                    android:textSize="20sp"
+                    android:textStyle="italic|bold" />
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/myAge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="24 "
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" years old."
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Primary Contact :"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/myPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" 9654228140"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/myAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text=" 801,Jaypee Greens Wishtown, Noida"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Primary Contact :"
-                android:textSize="15sp"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/myPhone"
-                android:text=" 9654228140"
-                android:textSize="15sp"
-                />
-
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/myAddress"
-            android:text=" 801,Jaypee Greens Wishtown, Noida"
-            android:textSize="15sp"
-            android:layout_marginBottom="8dp"
-            />
-
-    </LinearLayout>
-
-</LinearLayout>
-
-</android.support.v7.widget.CardView>
-
+    </android.support.v7.widget.CardView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/myProfileCard"
-       android:weightSum="2"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-           android:layout_weight="1"
             android:layout_margin="8dp"
+            android:layout_weight="1"
             android:background="@drawable/border"
             android:onClick="doShowMyMedicines"
-            android:text="My Medicines"/>
+            android:text="My Medicines" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="8dp"
+            android:layout_weight="1"
             android:background="@drawable/border"
-            android:onClick="doShowMyHealthLogs"
-            android:text="My HealthLogs"/>
-
+            android:text="My HealthLogs" />
 
     </LinearLayout>
-
-
 
 </RelativeLayout>
