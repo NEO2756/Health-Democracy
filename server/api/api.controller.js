@@ -11,7 +11,7 @@ var options = {
   admin: false,
   debug: false
 };
-var adminAddress = "0x77b5d2efe735cc522e7f944c61ae9a09e91de147";
+var adminAddress = "0x81cb23bf16933c17ea17680dd3e66fa1ce91218f";
 var patientContractAddress = '0x44b348d94e99e50bea5b0a478099dffa7edc876e';
 var web3 = web3_extended.create(options);
 //web3.eth.defaultAccount = web3.eth.accounts[0];
@@ -25,14 +25,17 @@ var patientAbi = JSON.parse('[{"constant":true,"inputs":[],"name":"getName","out
 
 var pharmaAbi = JSON.parse('[{"constant":false,"inputs":[{"name":"customer","type":"address"},{"name":"medName","type":"string"},{"name":"quantity","type":"uint256"}],"name":"getRequest","outputs":[{"name":"a","type":"bool"}],"payable":true,"type":"function"},{"constant":true,"inputs":[],"name":"pname","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"pharma_name","type":"string"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"customer","type":"address"},{"indexed":false,"name":"medName","type":"string"},{"indexed":false,"name":"quantity","type":"uint256"}],"name":"customerRequest","type":"event"}]');
 
-var pharmaAddress = '0x7f597686749a0300c673f24fa30b46afc7a80769';
+var pharmaAddress = '0x361902ecd3fd991047d5009e0b02d537461f9b81';
 var pharmaContract = web3.eth.contract(pharmaAbi).at(pharmaAddress);
 
 
 var pharmaAddress = '';
 var pharmaContract = web3.eth.contract(pharmaAbi).at(pharmaAddress);
 
+let config = require('./../config/config'),
+    querystring = require('querystring');
 
+// blockchain
 exports.registerPatient = function(req, res){
     var name = (req.body.name);
     var address = (req.body.address);
@@ -52,23 +55,7 @@ exports.registerPatient = function(req, res){
     return res.json({"success":"true",'txHash': txHash, 'patientsAddress':patientAddress});
 }
 
-
-function estimateGas(from, contractAddress,callData){
-    var estimateGas = web3.eth.estimateGas({from:from, to:contractAddress, data:callData});
-    return estimateGas;
-}
-
-exports.addCareTacker = function(req, res){
-    var patientId = req.body.patientId;
-    var name = req.body.name;
-    var email= req.body.email;
-    PatientService.addCareTacker = function(err, resp1){
-        if(!err){
-            return res.json({"success":"true","message":"Added successfully"});
-        }
-    }
-}
-
+// blockchain
 exports.getPatinetDetails = function(req, res){
 	var patientId = req.body.patientId;
     // console.log(patientId);
@@ -82,29 +69,6 @@ exports.getPatinetDetails = function(req, res){
     var mobileNo = patientContract.getphnum();
     // console.log(mobileNo);
     return res.json({"success":"true",'name': name, 'dob':dob, 'address':address , 'bloodGroup':bloodGroup, 'mobileNo':mobileNo });
-}
-
-exports.getTransactionReceipt = function(req, res){
-	var txHash = req.body.txHash;
-    // console.log(txHash);
-	var txReceipt = web3.eth.getTransactionReceipt(txHash);
-    // console.log(txReceipt)
-	var txhash = txReceipt.transactionHash;
-    var txIndex = txReceipt.transactionIndex;
-    var blockHash = txReceipt.blockHash;
-    var blockNumber = txReceipt.blockNumber;
-    var gasUsed = txReceipt.gasUsed;
-    var cumulativeGasUsed = txReceipt.cumulativeGasUsed;
-
-    return res.json({"success":"true", 'txHash': txHash, 'txIndex':txIndex, 'blockHash': blockHash,  'blockNumber':blockNumber, 'gasUsed':gasUsed, 'cumulativeGasUsed':cumulativeGasUsed });
-}
-
-exports.logData = function(req, resp){
-	if($scope.startLoggingVar){
-        counter++;
-        // patient health data log on blockchain. so add patient address here
-        adminContract.addRecords.sendTransaction(patientContractAddress,counter, "Hello",{from:web3.eth.accounts[0], gas:2100000});
-    }
 }
 
 // adding prescription to db
@@ -144,45 +108,6 @@ exports.addPrescription = function(req, resp){
 	})
 }
 
-function addSchedule(patientId,medicineName,fromDate,tillDate,timesADay){
-    // create calander will take params like id, tillDate, fromdate, medicineName, status
-    PatientService.addSchedule(patientId,medicineName,fromDate,tillDate, timesADay,function(resp1){
-        console.log(resp1);
-        if(!resp1.error){
-            console.log("Resp from db : "+JSON.stringify(resp1));
-            //create a calander for each prescriptionId
-            //return resp.json({"success":"true","data":"Schedule added successfully"});
-        }
-        else{
-            console.log("Schedule could not be saved");     
-        }
-    });
-}
-
-/*exports.getSchedule = function(req, resp){
-    var patientId = req.body.patientId;
-    //var patientId = '0x1309d6120d98aaf56913c7ab7b5964a95ecb8697';
-    PatientService.getSchedule(patientId, function(resp1){
-        if(!resp1.success){
-            console.log("Error in getting schedule");
-            return res.json({"success":"false","message":"Error in getting schedule"});
-        }
-        else{
-            console.log("succesfully recieved schedule");
-            return resp.json({"success":"true","data":[{"result":resp1}]});
-        }
-    });
-}*/
-
-function addPrescriptionLogs(patientId, prescription){
-    PatientService.addPrescriptionLog(patientId, prescription, function(resp1){
-        if(!resp1.error)
-            return true;
-        else
-            return false;
-    });
-}
-
 exports.getPrescriptionLogs = function(req, res){
     var patientId = req.body.patientId;
     PatientService.getPrescriptionLog(patientId, function(resp1){
@@ -197,24 +122,236 @@ exports.getPrescriptionLogs = function(req, res){
     })
 }
 
-// medicine take or not taken to db--schedule 
-exports.updateMedicineTakeStatus = function(req, resp){
+
+/*Add medicine tale or not taken logs to blockchain*/
+exports.addMedicineLogsToBlockchain = function(req, resp){
     var patientId = req.body.patientId;
     var medicineName = req.body.medicineName;
     var date = req.body.date;
-    var time = req.body.time; // 0-morning, 1- afternood, 2- evening/night
+    var time = req.body.time; //time submiited by end user
     var status = req.body.status; // Taken or skipped
-    PatientService.updateMedicineTakeStatus(patientId, medicineName,date, time, status, function(resp1){
+    var from = web3.eth.accounts[0];
+    var patientContract = web3.eth.contract(patientAbi).at(patientId);
+    // check gas before sending transaction
+    var callData = patientContract.storeMedicineStatus.getData(medicineName, time, status);
+    var estimateGas1 = estimateGas(from, patientId, callData);
+    console.log(estimateGas1);
+    var txHash = patientContract.storeMedicineStatus.sendTransaction(medicineName, time, status, {from:from, gas:estimateGas1});
+    console.log(txHash);
+    // save it to db as well 
+    PatientService.blockchainMedicineLogs(patientId, txHash, medicineName, date, time, status, function(resp1){
+        if(!resp1.error)
+            //return true;
+            return resp.json({"success":"true", 'message':'status upadated sucessfully'});
+        else
+            return resp.json({"success":"false", 'message':'unable to update status'})
+    });
+}
+
+exports.sendSMS = function(req, resp){
+     try {
+           
+        let templates = {
+        medicine: 'Dear User, Mr YYYY has not taken XXXX.',
+        signin: 'Dear User, Please use XXXX as your OTP to verify phone for Vaccine Reminder app.',
+        password: 'Dear User, Please use XXXX as your OTP to reset password for Vaccine Reminder app.',
+        phone: 'Dear User, Please use XXXX as your OTP to update phone for Vaccine Reminder app.'
+        };
+        let qs, response;
+        qs = querystring.stringify({
+            authkey: config.app.smsAuthkey,
+            sender: config.app.smsSender,
+            route: 4,
+              message: templates['medicine'].replace(/XXXX/, req.body.medicine).replace(/YYYY/, req.body.patientName),
+            mobiles:  req.body.phone,
+            mobiles:  req.body.phone
+        });
+        console.log("qwertyuio :", qs);
+
+        var request = require('request');
+        request('http://isha.ishatechnology.com/api/sendhttp.php?' + qs, function (error, response, body) {
+          console.log('error:', error); // Print the error if one occurred
+          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+          console.log('body:', body); // Print the HTML for the Google homepage.
+        });
+             return resp.json({'success':true, 'message':"SMS Sent Successfully"});
+
+     }
+     catch (error) {
+           console.log('Exception caught in sending SMS: ', { error: error });
+     }
+ }
+
+// save medicieStatus like taken or not taken in db
+exports.addMedicineLogs = function(req, resp){
+    var patientId = req.body.patientId;
+    var medicineName = req.body.medicineName;
+    var date = req.body.date;
+    var time = req.body.time; //time submiited by end user
+    var status = req.body.status; // Taken or skipped
+    PatientService.addMedicineLogs(patientId, medicineName,date, time, status, function(resp1){
         if(!resp1.error)
             //return true;
             return resp.json({"success":"true", 'message':'status upadated sucessfully'});
         else
             return resp.json({"success":"false", 'message':'unable to update status'});
-    });
+    }); 
+}
 
+// saving transaction details to database.
+function savePatient(txId,patientId,name,address,dob,bloodGroup,mobileNo){
+	PatientService.savePatient(txId,patientId,name,address,dob,bloodGroup,mobileNo, function(resp){
+
+		if(!resp.error){
+			console.log("Resp from db : "+JSON.stringify(resp));
+		}
+		else{
+			console.log("Patient could not be saved");		
+		}
+	});
+} // save Patient ends here
+
+
+function addPrescriptionLogs(patientId, prescription){
+    PatientService.addPrescriptionLog(patientId, prescription, function(resp1){
+        if(!resp1.error)
+            return true;
+        else
+            return false;
+    });
+}
+
+function estimateGas(from, contractAddress,callData){
+    var estimateGas = web3.eth.estimateGas({from:from, to:contractAddress, data:callData});
+    return estimateGas;
 }
 
 
+
+
+/********************Unused functionality--- yet to be implemented*******************/
+
+// add prescription to blockchain-- working
+exports.savePrescriptionToBlockchain = function(req, resp){
+        var patientId = req.body.patientId;
+        var from = web3.eth.accounts[0];
+        var p = { 
+                medicineName : req.body.medicineName , 
+                timesADay : req.body.timesADay,
+                fromDate : req.body.fromDate,
+                tillDate : req.body.tillDate,
+                doctorId : req.body.doctorId,
+                clockOne: req.body.clockOne,
+                clockTwo : req.body.clockTwo,
+                clockThree: req.body.clockThree
+         };
+
+        var patientContract = web3.eth.contract(patientAbi).at(patientId);
+        //var tx = patientContract.storePrescription.sendTransaction(p.medicineName, p.timesADay, p.fromdate,p.tillDate,p.doctorId,{from:from, gas:148126});
+        var tx = patientContract.storePrescription.sendTransaction("sd",42, 234,4324,"sfdafsa",{from:from, gas:148126});
+        if(tx)
+            return resp.json({'success':true,'data':tx});
+        else
+            return resp.json({'success':true,'message':'unable to add prescription to blockchain'});
+    }
+
+// get prescription from blockchain -- big number issue
+exports.getPrescriptionFromBlockchain = function(req, resp){
+        var patientId = req.body.patientId;
+        var patientContract = web3.eth.contract(patientAbi).at(patientId);
+        //var name = patientContract.getPrescription(0);
+        //console.log(name);
+        var length = patientContract.getTotalPrescriptionsLength().c.length;
+        var x = patientContract.prescriptionArr[0];
+        console.log(x);
+        // var prescriptionHistory = [];
+        // for (var i =0;i<length;i++){
+          
+        //     var currentPrescription = patientContract.getPrescription("0");
+        //     prescriptionHistory.push(currentPrescription);
+        // }
+        //return resp.json({'success':true, 'prescriptionHistory':prescriptionHistory});
+    }
+
+exports.requestFromPharma = function(req, resp){
+    var customer = req.body.patientId;
+    var medname = req.body.medicineName;
+    var quantity = parseInt(req.body.quantity);
+    var gas = req.body.gas;
+    var from = web3.eth.accounts[0]; //req.body.from;
+    //estimate gas first
+    /*var callData = pharmaContract.getRequest.getData(customer, medname, quantity);
+    var estimateGas1 = estimateGas(from,pharmaAddress,callData );*/
+    //var tx = pharmaContract.getRequest.sendTransaction(customer, medname, quantity, {from:from, gas:gas});
+    var tx = pharmaContract.getRequest.sendTransaction("0x4756244af010ff8ebeae8edd6034cc0935d2d72d", "aaa", 2, {from:from, gas:26460});    
+    if(tx)
+        resp.josn({'success':true, 'message':'Ether send tp pharmacy'});
+    else
+        resp.json({'success':true, 'message':'Unable to send ethrs to pharmacy. Some error occured'});
+}
+
+// register pharama
+exports.registerPharmaToBlockchain = function(req, res){
+    var name = (req.body.name);       
+    var from = web3.eth.accounts[0]; //req.body.from;
+    //estimate gas first
+    var callData = adminContract.registerPharma.getData(name);
+    var estimateGas1 = estimateGas(from,adminAddress,callData );
+    console.log(estimateGas1);
+    //var supplyGas = estimateGas1*5;
+    var txHash = adminContract.registerPharma.sendTransaction(name, {from:from, gas:estimateGas1});        
+    var pharmaAddress = adminContract.getPharmaContract();        
+    return res.json({"success":"true",'txHash': txHash, 'pharmaAddress':pharmaAddress});
+}
+
+exports.addCareTacker = function(req, res){
+    var patientId = req.body.patientId;
+    var name = req.body.name;
+    var email= req.body.email;
+    PatientService.addCareTacker = function(err, resp1){
+        if(!err){
+            return res.json({"success":"true","message":"Added successfully"});
+        }
+    }
+}
+
+exports.getTransactionReceipt = function(req, res){
+    var txHash = req.body.txHash;
+    // console.log(txHash);
+    var txReceipt = web3.eth.getTransactionReceipt(txHash);
+    // console.log(txReceipt)
+    var txhash = txReceipt.transactionHash;
+    var txIndex = txReceipt.transactionIndex;
+    var blockHash = txReceipt.blockHash;
+    var blockNumber = txReceipt.blockNumber;
+    var gasUsed = txReceipt.gasUsed;
+    var cumulativeGasUsed = txReceipt.cumulativeGasUsed;
+
+    return res.json({"success":"true", 'txHash': txHash, 'txIndex':txIndex, 'blockHash': blockHash,  'blockNumber':blockNumber, 'gasUsed':gasUsed, 'cumulativeGasUsed':cumulativeGasUsed });
+}
+
+exports.logData = function(req, resp){
+    if($scope.startLoggingVar){
+        counter++;
+        // patient health data log on blockchain. so add patient address here
+        adminContract.addRecords.sendTransaction(patientContractAddress,counter, "Hello",{from:web3.eth.accounts[0], gas:2100000});
+    }
+}
+
+function addSchedule(patientId,medicineName,fromDate,tillDate,timesADay){
+    // create calander will take params like id, tillDate, fromdate, medicineName, status
+    PatientService.addSchedule(patientId,medicineName,fromDate,tillDate, timesADay,function(resp1){
+        console.log(resp1);
+        if(!resp1.error){
+            console.log("Resp from db : "+JSON.stringify(resp1));
+            //create a calander for each prescriptionId
+            //return resp.json({"success":"true","data":"Schedule added successfully"});
+        }
+        else{
+            console.log("Schedule could not be saved");     
+        }
+    });
+}
 
 exports.getPatients = function(req, res){
     console.log("getting patients");
@@ -240,7 +377,6 @@ exports.getPatients = function(req, res){
     })*/
 }
 
-
 // get count of total patients
 exports.countPatients = function (req, res){
     //var status = req.body.status;
@@ -256,185 +392,50 @@ exports.countPatients = function (req, res){
     })
 }
 
-// saving transaction details to database.
-function savePatient(txId,patientId,name,address,dob,bloodGroup,mobileNo){
-	PatientService.savePatient(txId,patientId,name,address,dob,bloodGroup,mobileNo, function(resp){
 
-		if(!resp.error){
-			console.log("Resp from db : "+JSON.stringify(resp));
-		}
-		else{
-			console.log("Patient could not be saved");		
-		}
-	});
-} // save Patient ends here
-
-
-// save medicieStatus like taken or not taken in db
-exports.addMedicineLogs = function(req, resp){
+// medicine take or not taken to db--schedule 
+exports.updateMedicineTakeStatus = function(req, resp){
     var patientId = req.body.patientId;
     var medicineName = req.body.medicineName;
     var date = req.body.date;
-    var time = req.body.time; //time submiited by end user
+    var time = req.body.time; // 0-morning, 1- afternood, 2- evening/night
     var status = req.body.status; // Taken or skipped
-    PatientService.addMedicineLogs(patientId, medicineName,date, time, status, function(resp1){
+    PatientService.updateMedicineTakeStatus(patientId, medicineName,date, time, status, function(resp1){
         if(!resp1.error)
             //return true;
             return resp.json({"success":"true", 'message':'status upadated sucessfully'});
         else
             return resp.json({"success":"false", 'message':'unable to update status'});
-    }); 
+    });
 }
 
-/*Add medicine tale or not taken logs to blockchain*/
-exports.addMedicineLogsToBlockchain = function(req, resp){
+/*exports.getSchedule = function(req, resp){
     var patientId = req.body.patientId;
-    var medicineName = req.body.medicineName;
-    var date = req.body.date;
-    var time = req.body.time; //time submiited by end user
-    var status = req.body.status; // Taken or skipped
-    var from = web3.eth.accounts[0];
-    var patientContract = web3.eth.contract(patientAbi).at(patientId);
-    // check gas before sending transaction
-    var callData = patientContract.storeMedicineStatus.getData(medicineName, time, status);
-    var estimateGas1 = estimateGas(from, patientId, callData);
-    console.log(estimateGas1);
-    var txHash = patientContract.storeMedicineStatus.sendTransaction(medicineName, time, status, {from:from, gas:estimateGas1});
-    // save it to db as well 
-    PatientService.blockchainMedicineLogs(patientId, txHash, medicineName, date, time, status, function(resp1){
-        if(!resp1.error)
+    //var patientId = '0x1309d6120d98aaf56913c7ab7b5964a95ecb8697';
+    PatientService.getSchedule(patientId, function(resp1){
+        if(!resp1.success){
+            console.log("Error in getting schedule");
+            return res.json({"success":"false","message":"Error in getting schedule"});
+        }
+        else{
+            console.log("succesfully recieved schedule");
+            return resp.json({"success":"true","data":[{"result":resp1}]});
+        }
+    });
+}*/
+
+// watch for events
+/*var adminEvent = adminContract.log();
+adminEvent.watch(function(error, event){
+  if (!error)
+    console.log(event);
+    // add logs to db
+    PatientService.addHealthLogs(patientId, bpm, bp, spo2, function(resp1){
+         if(!resp1.error)
             //return true;
-            return resp.json({"success":"true", 'message':'status upadated sucessfully'});
+            return resp.json({"success":"true", 'message':'Health data saved to db'});
         else
-            return resp.json({"success":"false", 'message':'unable to update status'})
+            return resp.json({"success":"false", 'message':'unable to save heath data to db'});
     });
+});*/
 
-    }
-
-
-exports.savePrescriptionToBlockchain = function(req, resp){
-        var patientId = req.body.patientId;
-        var from = web3.eth.accounts[0];
-        var p = { 
-                medicineName : req.body.medicineName , 
-                timesADay : req.body.timesADay,
-                fromDate : req.body.fromDate,
-                tillDate : req.body.tillDate,
-                doctorId : req.body.doctorId,
-                clockOne: req.body.clockOne,
-                clockTwo : req.body.clockTwo,
-                clockThree: req.body.clockThree
-         };
-
-        var patientContract = web3.eth.contract(patientAbi).at(patientId);
-        //var tx = patientContract.storePrescription.sendTransaction(p.medicineName, p.timesADay, p.fromdate,p.tillDate,p.doctorId,{from:from, gas:148126});
-        var tx = patientContract.storePrescription.sendTransaction("sd",42, 234,4324,"sfdafsa",{from:from, gas:148126});
-        if(tx)
-            return resp.json({'success':true,'data':tx});
-        else
-            return resp.json({'success':true,'message':'unable to add prescription to blockchain'});
-    }
-
-exports.getPrescriptionFromBlockchain = function(req, resp){
-        var patientId = req.body.patientId;
-        var patientContract = web3.eth.contract(patientAbi).at(patientId);
-        //var name = patientContract.getPrescription(0);
-        //console.log(name);
-        var length = patientContract.getTotalPrescriptionsLength().c.length;
-        var x = patientContract.prescriptionArr[0];
-        console.log(x);
-        // var prescriptionHistory = [];
-        // for (var i =0;i<length;i++){
-          
-        //     var currentPrescription = patientContract.getPrescription("0");
-        //     prescriptionHistory.push(currentPrescription);
-        // }
-        //return resp.json({'success':true, 'prescriptionHistory':prescriptionHistory});
-    }
-
-
-let config = require('./../config/config'),
-    querystring = require('querystring');
-
-exports.sendSMS = function(req, resp){
-     try {
-           
-        let templates = {
-        medicine: 'Dear User, Mr YYYY has not taken XXXX.',
-        signin: 'Dear User, Please use XXXX as your OTP to verify phone for Vaccine Reminder app.',
-        password: 'Dear User, Please use XXXX as your OTP to reset password for Vaccine Reminder app.',
-        phone: 'Dear User, Please use XXXX as your OTP to update phone for Vaccine Reminder app.'
-    };
-    let qs, response;
-    qs = querystring.stringify({
-        authkey: config.app.smsAuthkey,
-        sender: config.app.smsSender,
-        route: 4,
-          message: templates['medicine'].replace(/XXXX/, req.body.medicine).replace(/YYYY/, req.body.patientName),
-        mobiles:  req.body.phone,
-        mobiles:  req.body.phone
-    });
-    console.log("qwertyuio :", qs);
-
-        var request = require('request');
-        request('http://isha.ishatechnology.com/api/sendhttp.php?' + qs, function (error, response, body) {
-          console.log('error:', error); // Print the error if one occurred
-          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-          console.log('body:', body); // Print the HTML for the Google homepage.
-        });
-             return resp.json({'success':true, 'message':"SMS Sent Successfully"});
-
-     }
-     catch (error) {
-           console.log('Exception caught in sending SMS: ', { error: error });
-     }
- }
-
-    exports.requestFromPharma = function(req, resp){
-        var customer = req.body.patientId;
-        var medname = req.body.medicineName;
-        var quantity = parseInt(req.body.quantity);
-        var from = web3.eth.accounts[0]; //req.body.from;
-        //estimate gas first
-        var callData = pharmaContract.getRequest.getData(customer, medname, quantity);
-        var estimateGas1 = estimateGas(from,pharmaAddress,callData );
-        var tx = pharmaContract.getRequest.sendTransaction(customer, medname, quantity, {from:from, gas:estimateGas1});
-        if(tx)
-            resp.josn({'success':true, 'message':'Ether send tp pharmacy'});
-        else
-            resp.json({'success':true, 'message':'Unable to send ethrs to pharmacy. Some error occured'});
-    }
-
-    // register pharama
-    exports.registerPharmaToBlockchain = function(req, res){
-        var name = (req.body.name);       
-        var from = web3.eth.accounts[0]; //req.body.from;
-        //estimate gas first
-        var callData = adminContract.registerPharma.getData(name);
-        var estimateGas1 = estimateGas(from,adminAddress,callData );
-        console.log(estimateGas1);
-        //var supplyGas = estimateGas1*5;
-        var txHash = adminContract.registerPharma.sendTransaction(name, {from:from, gas:estimateGas1});        
-        var pharmaAddress = adminContract.getPharmaContract();        
-        return res.json({"success":"true",'txHash': txHash, 'pharmaAddress':pharmaAddress});
-    }
-
-
-    // watch for events
-    /*var adminEvent = adminContract.log();
-
-
-    // watch for events
-    adminEvent.watch(function(error, event){
-      if (!error)
-        console.log(event);
-        // add logs to db
-        PatientService.addHealthLogs(patientId, bpm, bp, spo2, function(resp1){
-             if(!resp1.error)
-                //return true;
-                return resp.json({"success":"true", 'message':'Health data saved to db'});
-            else
-                return resp.json({"success":"false", 'message':'unable to save heath data to db'});
-        });
-    });
-*/
