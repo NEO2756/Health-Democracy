@@ -11,17 +11,17 @@ var options = {
   admin: false,
   debug: false
 };
-var adminAddress = "0x31fde11868af19be6060714165846ef03beefd9d";
+var adminAddress = "0x62adb822a60ddea45c24db272616524f998f1ef4";
 var patientContractAddress = '0x44b348d94e99e50bea5b0a478099dffa7edc876e';
 var web3 = web3_extended.create(options);
-web3.eth.defaultAccount = web3.eth.accounts[0];
+//web3.eth.defaultAccount = web3.eth.accounts[0];
 /*Admin Contract*/
 var adminAbi = JSON.parse('[{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"patients","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getLatestPatientAddress","outputs":[{"name":"addr","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"}],"name":"registerPharma","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getPharmaContract","outputs":[{"name":"addr","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"pharmaAddr","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"records","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"patientsAddr","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"id","type":"address"},{"name":"day","type":"uint256"},{"name":"data","type":"string"}],"name":"addRecords","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getFirstPatietAddress","outputs":[{"name":"addr","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"p_address","type":"string"},{"name":"dob","type":"uint256"},{"name":"blood_grp","type":"string"},{"name":"phnum","type":"string"}],"name":"registerPatient","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"Admin","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"id","type":"address"},{"indexed":false,"name":"desc","type":"string"}],"name":"log","type":"event"}]');
 //var adminAbi = JSON.parse(adminAbiString);
 var adminContract = web3.eth.contract(adminAbi).at(adminAddress);
 var patientabi = JSON.parse('[{"constant":true,"inputs":[],"name":"getName","outputs":[{"name":"name","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getaddress","outputs":[{"name":"add","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"medicineName","type":"string"},{"name":"timesADay","type":"uint256"},{"name":"fromDate","type":"string"},{"name":"tillDate","type":"string"},{"name":"doctorId","type":"string"}],"name":"storePrescription","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"index1","type":"uint256"}],"name":"getPrescription","outputs":[{"name":"medicineName","type":"string"},{"name":"timesADay","type":"uint256"},{"name":"fromDate","type":"string"},{"name":"tillDate","type":"string"},{"name":"doctorId","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getTotalPrescriptionsLength","outputs":[{"name":"length1","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"bpm","type":"uint256"},{"name":"bp","type":"uint256"},{"name":"spo2","type":"string"}],"name":"addHealthData","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"prescriptionArr","outputs":[{"name":"medicineName","type":"string"},{"name":"timesADay","type":"uint256"},{"name":"fromDate","type":"string"},{"name":"tillDate","type":"string"},{"name":"doctorId","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"medStatus","outputs":[{"name":"medicineName","type":"string"},{"name":"time","type":"string"},{"name":"status","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getbloodgrp","outputs":[{"name":"blood_grp","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"p","outputs":[{"name":"name","type":"string"},{"name":"p_address","type":"string"},{"name":"dob","type":"uint256"},{"name":"blood_grp","type":"string"},{"name":"phnum","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"medicineName","type":"string"},{"name":"time","type":"string"},{"name":"status","type":"bool"}],"name":"storeMedicineStatus","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getdob","outputs":[{"name":"dob","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getphnum","outputs":[{"name":"phnum","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"name","type":"string"},{"name":"p_address","type":"string"},{"name":"dob","type":"uint256"},{"name":"blood_grp","type":"string"},{"name":"phnum","type":"string"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"bpm","type":"uint256"},{"indexed":false,"name":"bp","type":"uint256"},{"indexed":false,"name":"spo2","type":"string"}],"name":"logEvent","type":"event"}]');
-
 var pharmaAbi = JSON.parse('[{"constant":true,"inputs":[],"name":"pname","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"pharma_name","type":"string"}],"payable":false,"type":"constructor"}]');
+
 exports.registerPatient = function(req, res){
 var name = (req.body.name);
 var address = (req.body.address);
@@ -29,11 +29,22 @@ var dob = (req.body.dob);
 var bloodGroup = (req.body.bloodGroup);
 var mobileNo = (req.body.mobileNo);
 var from = web3.eth.accounts[0]; //req.body.from;
-var txHash = adminContract.registerPatient.sendTransaction(name, address, dob, bloodGroup, mobileNo, {from:from, gas:1332566});        
+//estimate gas first
+var callData = adminContract.registerPatient.getData(name, address, dob, bloodGroup, mobileNo);
+var estimateGas1 = estimateGas(from,adminAddress,callData );
+console.log(estimateGas1);
+//var supplyGas = estimateGas1*5;
+var txHash = adminContract.registerPatient.sendTransaction(name, address, dob, bloodGroup, mobileNo, {from:from, gas:estimateGas1});        
 var patientAddress = adminContract.getLatestPatientAddress();
 // Save patients to db
 savePatient(txHash,patientAddress,name,address,dob,bloodGroup,mobileNo);
 return res.json({"success":"true",'txHash': txHash, 'patientsAddress':patientAddress});
+}
+
+
+function estimateGas(from, contractAddress,callData){
+    var estimateGas = web3.eth.estimateGas({from:from, to:contractAddress, data:callData});
+    return estimateGas;
 }
 
 exports.addCareTacker = function(req, res){
@@ -169,7 +180,7 @@ exports.getPrescriptionLogs = function(req, res){
             return res.json({"message":"Error occured in getting prescription history"});
         }
         else{
-            console.log("succesfully recieved prescription history");
+            console.log("succesfully recieved prescription history");2388652
             return res.json({"result":resp1});
         }
     })
@@ -269,9 +280,13 @@ exports.addMedicineLogsToBlockchain = function(req, resp){
     var status = req.body.status; // Taken or skipped
     var from = web3.eth.accounts[0];
     var patientContract = web3.eth.contract(patientabi).at(patientId);
-    var txHash = patientContract.storeMedicineStatus.sendTransaction(medicineName, time, status, {from:from, gas:697283});
+    // check gas before sending transaction
+    var callData = patientContract.storeMedicineStatus.getData(medicineName, time, status);
+    var estimateGas1 = estimateGas(from, patientId, callData);
+    console.log(estimateGas1);
+    var txHash = patientContract.storeMedicineStatus.sendTransaction(medicineName, time, status, {from:from, gas:estimateGas1});
     // save it to db as well 
-    PatientService.blockchainMedicineLogs(patientId, txhash, medicineName, date, time, status, function(resp1){
+    PatientService.blockchainMedicineLogs(patientId, txHash, medicineName, date, time, status, function(resp1){
         if(!resp1.error)
             //return true;
             return resp.json({"success":"true", 'message':'status upadated sucessfully'});
@@ -281,7 +296,8 @@ exports.addMedicineLogsToBlockchain = function(req, resp){
 
     }
 
-    exports.savePrescriptionToBlockchain = function(req, resp){
+
+exports.savePrescriptionToBlockchain = function(req, resp){
         var patientId = req.body.patientId;
         var from = web3.eth.accounts[0];
         var p = { 
@@ -296,15 +312,15 @@ exports.addMedicineLogsToBlockchain = function(req, resp){
          };
 
         var patientContract = web3.eth.contract(patientabi).at(patientId);
-        //var tx = patientContract.storePrescription.sendTransaction(p.medicineName, p.timesADay, p.fromdate,p.tillDate,p.doctorId,{from:'0x306b593a376c542c0a57f0dfe99a29d82bf1a9d0', gas:30000});
-        var tx = patientContract.storePrescription.sendTransaction("sd",42, 234,4324,"sfdafsa",{from:'0x306b593a376c542c0a57f0dfe99a29d82bf1a9d0', gas:30000});
+        //var tx = patientContract.storePrescription.sendTransaction(p.medicineName, p.timesADay, p.fromdate,p.tillDate,p.doctorId,{from:from, gas:148126});
+        var tx = patientContract.storePrescription.sendTransaction("sd",42, 234,4324,"sfdafsa",{from:from, gas:148126});
         if(tx)
             return resp.json({'success':true,'data':tx});
         else
             return resp.json({'success':true,'message':'unable to add prescription to blockchain'});
     }
 
-    exports.getPrescriptionFromBlockchain = function(req, resp){
+exports.getPrescriptionFromBlockchain = function(req, resp){
         var patientId = req.body.patientId;
         var patientContract = web3.eth.contract(patientabi).at(patientId);
         //var name = patientContract.getPrescription(0);
@@ -320,3 +336,41 @@ exports.addMedicineLogsToBlockchain = function(req, resp){
         // }
         //return resp.json({'success':true, 'prescriptionHistory':prescriptionHistory});
     }
+
+
+let config = require('./../config/config'),
+    querystring = require('querystring');
+
+exports.sendSMS = function(req, resp){
+     try {
+           
+        let templates = {
+        medicine: 'Dear User, Mr YYYY has not taken XXXX.',
+        signin: 'Dear User, Please use XXXX as your OTP to verify phone for Vaccine Reminder app.',
+        password: 'Dear User, Please use XXXX as your OTP to reset password for Vaccine Reminder app.',
+        phone: 'Dear User, Please use XXXX as your OTP to update phone for Vaccine Reminder app.'
+    };
+    let qs, response;
+    qs = querystring.stringify({
+        authkey: config.app.smsAuthkey,
+        sender: config.app.smsSender,
+        route: 4,
+          message: templates['medicine'].replace(/XXXX/, req.body.medicine).replace(/YYYY/, req.body.patientName),
+        mobiles:  req.body.phone,
+        mobiles:  req.body.phone
+    });
+    console.log("qwertyuio :", qs);
+
+        var request = require('request');
+        request('http://isha.ishatechnology.com/api/sendhttp.php?' + qs, function (error, response, body) {
+          console.log('error:', error); // Print the error if one occurred
+          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+          console.log('body:', body); // Print the HTML for the Google homepage.
+        });
+             return resp.json({'success':true, 'message':"SMS Sent Successfully"});
+
+     }
+     catch (error) {
+           console.log('Exception caught in sending SMS: ', { error: error });
+     }
+ }
