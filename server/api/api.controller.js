@@ -25,27 +25,27 @@ var patientAbi = JSON.parse('[{"constant":true,"inputs":[],"name":"getName","out
 
 var pharmaAbi = JSON.parse('[{"constant":false,"inputs":[{"name":"customer","type":"address"},{"name":"medName","type":"string"},{"name":"quantity","type":"uint256"}],"name":"getRequest","outputs":[{"name":"a","type":"bool"}],"payable":true,"type":"function"},{"constant":true,"inputs":[],"name":"pname","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"pharma_name","type":"string"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"customer","type":"address"},{"indexed":false,"name":"medName","type":"string"},{"indexed":false,"name":"quantity","type":"uint256"}],"name":"customerRequest","type":"event"}]');
 
-var pharmaAddress = '';
+var pharmaAddress = '0x2caffd12196f51bd308454cb006f258580060bdb';
 var pharmaContract = web3.eth.contract(pharmaAbi).at(pharmaAddress);
 
 
 exports.registerPatient = function(req, res){
-var name = (req.body.name);
-var address = (req.body.address);
-var dob = (req.body.dob);
-var bloodGroup = (req.body.bloodGroup);
-var mobileNo = (req.body.mobileNo);
-var from = web3.eth.accounts[0]; //req.body.from;
-//estimate gas first
-var callData = adminContract.registerPatient.getData(name, address, dob, bloodGroup, mobileNo);
-var estimateGas1 = estimateGas(from,adminAddress,callData );
-console.log(estimateGas1);
-//var supplyGas = estimateGas1*5;
-var txHash = adminContract.registerPatient.sendTransaction(name, address, dob, bloodGroup, mobileNo, {from:from, gas:estimateGas1});        
-var patientAddress = adminContract.getLatestPatientAddress();
-// Save patients to db
-savePatient(txHash,patientAddress,name,address,dob,bloodGroup,mobileNo);
-return res.json({"success":"true",'txHash': txHash, 'patientsAddress':patientAddress});
+    var name = (req.body.name);
+    var address = (req.body.address);
+    var dob = (req.body.dob);
+    var bloodGroup = (req.body.bloodGroup);
+    var mobileNo = (req.body.mobileNo);
+    var from = web3.eth.accounts[0]; //req.body.from;
+    //estimate gas first
+    var callData = adminContract.registerPatient.getData(name, address, dob, bloodGroup, mobileNo);
+    var estimateGas1 = estimateGas(from,adminAddress,callData );
+    console.log(estimateGas1);
+    //var supplyGas = estimateGas1*5;
+    var txHash = adminContract.registerPatient.sendTransaction(name, address, dob, bloodGroup, mobileNo, {from:from, gas:estimateGas1});        
+    var patientAddress = adminContract.getLatestPatientAddress();
+    // Save patients to db
+    savePatient(txHash,patientAddress,name,address,dob,bloodGroup,mobileNo);
+    return res.json({"success":"true",'txHash': txHash, 'patientsAddress':patientAddress});
 }
 
 
@@ -389,7 +389,11 @@ exports.sendSMS = function(req, resp){
     exports.requestFromPharma = function(req, resp){
         var customer = req.body.patientId;
         var medname = req.body.medicineName;
-        var quantity = req.body.quantity;
+        var quantity = parseInt(req.body.quantity);
+        var from = web3.eth.accounts[0]; //req.body.from;
+        //estimate gas first
+        var callData = pharmaContract.getRequest.getData(customer, medname, quantity);
+        var estimateGas1 = estimateGas(from,adminAddress,callData );
         var tx = pharmaContract.getRequest.sendTransaction(customer, medname, quantity, {form:from, gas:220000});
         if(tx)
             resp.josn({'success':true, 'message':'Ether send tp pharmacy'});
@@ -398,9 +402,18 @@ exports.sendSMS = function(req, resp){
     }
 
     // register pharama
-    /*exports.registerPharaToBlockchain = function(){
-
-    }*/
+    exports.registerPharmaToBlockchain = function(req, res){
+        var name = (req.body.name);       
+        var from = web3.eth.accounts[0]; //req.body.from;
+        //estimate gas first
+        var callData = adminContract.registerPharma.getData(name);
+        var estimateGas1 = estimateGas(from,adminAddress,callData );
+        console.log(estimateGas1);
+        //var supplyGas = estimateGas1*5;
+        var txHash = adminContract.registerPharma.sendTransaction(name, {from:from, gas:estimateGas1});        
+        var pharmaAddress = adminContract.getPharmaContract();        
+        return res.json({"success":"true",'txHash': txHash, 'pharmaAddress':pharmaAddress});
+    }
 
 
     // watch for events
