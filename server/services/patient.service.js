@@ -5,7 +5,8 @@ var Patients = require('./../models/patients.model'),
 	Schedules = require('./../models/schedules.model'),
 	PrescriptionLogs = require('./../models/prescriptionLogs.model'),
 	MedicineLogs = require("./../models/medicineLogs.model"),
-	BlockchainMedicineLogs = require("./../models/blockchainMedicineLogs.model");
+	BlockchainMedicineLogs = require("./../models/blockchainMedicineLogs.model"),
+	HealthDataLogs = require("./../models/healthDataLogs.model");
 
 
 var PatientService = function(){
@@ -45,40 +46,6 @@ var PatientService = function(){
 			});
 	}
 
-	/*_self.getSchedule = function(patientId,cb){
-		var query = {patientId: patientId};
-		//sort({_id:-1}).limit(1)
-		//Schedules.findOne(query, function(err, result){
-		Schedules.findOne(query, function(err, result){
-			if(err){
-				return cb({success : false, message : "Unable to get schedules"});
-			}
-			else{
-				return cb({success : true, data:result._doc});
-			}
-		});
-	}*/
-
-	/*_self.getSchedule = function(patientId,fromDatecb, cb){
-		var query = {patientId: patientId};
-		//db.market.find({}).sort({_id:-1}).limit(1)
-		Schedules.find(query, function(err, res){
-			if(err)
-				return cb({success : false, message : "Unable to get schedules"});
-			else
-				return cb({success : true, data:res});
-		});
-	}*/
-
-	/* With optional param*/
-	/*_self.getAllTransactions = function(skipRows,limit,status,cb){
-		var query = status ? {status:status} :{};
-		var cursor = Transaction.find(query);
-		cursor.skip(skipRows).limit(limit)
-			.then(function callback(result){				
-				return cb({"success":"true","data":result});
-			});
-	}*/////create a calander for each prescriptionIdcreate a calander for each prescriptionId
 
 	_self.addSchedule = function(patientId,medicineName,fromDate,tillDate,timesADay,cb){
 		var dateDiff = new Date(tillDate).getTime() - new Date(fromDate).getTime();
@@ -176,6 +143,19 @@ var PatientService = function(){
 			console.log("Error : "+err, "Response form db : "+JSON.stringify(res));
 			if(err) { return cb({error : true, message : err}) };
 			return cb({error : false, message : "Medicine Log Added Successfully"});
+		});
+	}
+
+	_self.addHealthLogs = function(patientId, bpm, bp, spo2, cb){
+		HealthDataLogs.create({
+			patientId:patientId,
+			bpm: bpm,
+			bp:bp,
+			spo2:spo2
+		}, function(err, res){
+			console.log("Error : "+err, "Response form db : "+JSON.stringify(res));
+			if(err) { return cb({error : true, message : err}) };
+			return cb({error : false, message : "Health Data Log Added Successfully"});
 		});
 	}
 
