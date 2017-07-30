@@ -30,9 +30,6 @@ pragma solidity ^0.4.11;
         prescription[] public prescriptionArr;
         
         
-        
-        
-
         patient public p;
         function Patient(string name, string p_address, uint dob, string blood_grp, string phnum)
         {
@@ -96,11 +93,11 @@ pragma solidity ^0.4.11;
             return medStatus;
         }*/
 
-    function getTotalPrescriptionsLength() constant returns (uint length1){
+        function getTotalPrescriptionsLength() constant returns (uint length1){
             return prescriptionArr.length;
         }
 
-      function getPrescription(uint index1) public constant returns(string medicineName, uint timesADay, string fromDate, string tillDate, string doctorId){
+        function getPrescription(uint index1) public constant returns(string medicineName, uint timesADay, string fromDate, string tillDate, string doctorId){
         return (prescriptionArr[index1].medicineName,
                 prescriptionArr[index1].timesADay,
                 prescriptionArr[index1].fromDate,
@@ -114,11 +111,18 @@ pragma solidity ^0.4.11;
       {
  
        string public pname;
+       event customerRequest(address customer, string medName, uint quantity);
  
        function Pharma(string pharma_name)
        {
          pname = pharma_name;
        }
+
+      function getRequest(address customer, string medName, uint quantity) public payable returns (bool a)
+      {
+        customerRequest(customer, medName, quantity);
+        return true;
+      }
        
       }
 
