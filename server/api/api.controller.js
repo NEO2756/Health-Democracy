@@ -11,7 +11,7 @@ var options = {
   admin: false,
   debug: false
 };
-var adminAddress = "0x052255405346fe9e38ca80ab1b68881a2058d1a2";
+var adminAddress = "0x77b5d2efe735cc522e7f944c61ae9a09e91de147";
 var patientContractAddress = '0x44b348d94e99e50bea5b0a478099dffa7edc876e';
 var web3 = web3_extended.create(options);
 //web3.eth.defaultAccount = web3.eth.accounts[0];
@@ -25,7 +25,7 @@ var patientAbi = JSON.parse('[{"constant":true,"inputs":[],"name":"getName","out
 
 var pharmaAbi = JSON.parse('[{"constant":false,"inputs":[{"name":"customer","type":"address"},{"name":"medName","type":"string"},{"name":"quantity","type":"uint256"}],"name":"getRequest","outputs":[{"name":"a","type":"bool"}],"payable":true,"type":"function"},{"constant":true,"inputs":[],"name":"pname","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"pharma_name","type":"string"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"customer","type":"address"},{"indexed":false,"name":"medName","type":"string"},{"indexed":false,"name":"quantity","type":"uint256"}],"name":"customerRequest","type":"event"}]');
 
-var pharmaAddress = '0x2caffd12196f51bd308454cb006f258580060bdb';
+var pharmaAddress = '0x7f597686749a0300c673f24fa30b46afc7a80769';
 var pharmaContract = web3.eth.contract(pharmaAbi).at(pharmaAddress);
 
 
@@ -397,8 +397,8 @@ exports.sendSMS = function(req, resp){
         var from = web3.eth.accounts[0]; //req.body.from;
         //estimate gas first
         var callData = pharmaContract.getRequest.getData(customer, medname, quantity);
-        var estimateGas1 = estimateGas(from,adminAddress,callData );
-        var tx = pharmaContract.getRequest.sendTransaction(customer, medname, quantity, {form:from, gas:220000});
+        var estimateGas1 = estimateGas(from,pharmaAddress,callData );
+        var tx = pharmaContract.getRequest.sendTransaction(customer, medname, quantity, {from:from, gas:estimateGas1});
         if(tx)
             resp.josn({'success':true, 'message':'Ether send tp pharmacy'});
         else
