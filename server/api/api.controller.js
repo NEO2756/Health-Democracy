@@ -29,6 +29,10 @@ var pharmaAddress = '0x2caffd12196f51bd308454cb006f258580060bdb';
 var pharmaContract = web3.eth.contract(pharmaAbi).at(pharmaAddress);
 
 
+var pharmaAddress = '';
+var pharmaContract = web3.eth.contract(pharmaAbi).at(pharmaAddress);
+
+
 exports.registerPatient = function(req, res){
     var name = (req.body.name);
     var address = (req.body.address);
@@ -418,6 +422,9 @@ exports.sendSMS = function(req, resp){
 
     // watch for events
     /*var adminEvent = adminContract.log();
+
+
+    // watch for events
     adminEvent.watch(function(error, event){
       if (!error)
         console.log(event);
