@@ -20,4 +20,5 @@ We are trying to solve the issues in current health scenario.
 * MEAN Stack, web3.js
 * Andorid studio for application development 
 
-
+# Bits on blocks
+https://bitsonblocks.net/2015/09/09/a-gentle-introduction-to-blockchain-technology/
